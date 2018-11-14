@@ -1,5 +1,7 @@
 (function (root) {
 
+    /* Utility */
+
     root.EventBinder = function EventBinder(eventsArray) {
         this.eventsArray = eventsArray;
 
@@ -19,16 +21,6 @@
             this.bindEvents(this.eventsArray);
         };
     };
-
-    root.select = function select(selector, context) {
-        if (typeof context === 'undefined') context = document;
-        return context.querySelector(selector);
-    }
-
-    root.selectAll = function selectAll(selector, context) {
-        if (typeof context === 'undefined') context = document;
-        return Array.prototype.slice.call(context.querySelectorAll(selector));
-    }
 
     root.debounce = function debounce(func, wait, immediate) {
         var timeout;
@@ -50,23 +42,39 @@
         };
     };
 
-    Element.prototype.is = function (selector) {
+
+    /* DOM Queries */
+
+    root.select = function select(selector, context) {
+        if (typeof context === 'undefined') context = document;
+        return context.querySelector(selector);
+    }
+
+    root.selectAll = function selectAll(selector, context) {
+        if (typeof context === 'undefined') context = document;
+        return Array.prototype.slice.call(context.querySelectorAll(selector));
+    }
+
+
+    /* Element Methods */
+
+    Element.prototype.is = function is(selector) {
         return this.matches(selector);
     }
 
-    Element.prototype.addClass = function (selector) {
+    Element.prototype.addClass = function addClass(selector) {
         this.classList.add(selector);
     }
 
-    Element.prototype.removeClass = function (selector) {
+    Element.prototype.removeClass = function removeClass(selector) {
         this.classList.remove(selector);
     }
 
-    Element.prototype.toggleClass = function (selector) {
+    Element.prototype.toggleClass = function toggleClass(selector) {
         this.classList.toggle(selector);
     }
 
-    Element.prototype.width = function (value) {
+    Element.prototype.width = function width(value) {
         if (typeof value !== 'undefined') {
             this.style.width = value + 'px';
             return this;
@@ -75,7 +83,7 @@
         }
     }
 
-    Element.prototype.height = function (value) {
+    Element.prototype.height = function height(value) {
         if (typeof value !== 'undefined') {
             this.style.height = value + 'px';
             return this;
@@ -83,5 +91,22 @@
             return this.clientHeight;
         }
     }
+
+
+    /* Window Dimensions */
+
+    root.windowSize = {
+        width: window.innerWidth,
+        height: window.innerHeight
+    };
+
+    function _setWindowSize() {
+        root.windowSize = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+    }
+
+    window.addEventListener('resize', debounce(_setWindowSize, 100));
 
 })(this);

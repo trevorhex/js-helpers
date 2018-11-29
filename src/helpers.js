@@ -2,18 +2,25 @@
 
     /* Utility */
 
+    root.empty = function empty(selector) {
+        return (
+            selector === null ||
+            typeof selector === 'undefined' ||
+            (Array.isArray(selector) && !selector.length)
+        );
+    };
+
     root.EventBinder = function EventBinder(eventsArray) {
+        var binder = this;
         this.eventsArray = eventsArray;
 
         this.bindEvent = function (event, selector, handler) {
-            var self = this;
-
-            if (selector === null || (Array.isArray(selector) && !selector.length)) {
+            if (empty(selector)) {
                 console.warn('EventBinder selector is null or an empty array.');
                 return;
-            } else if (selector.length && selector !== window) {
+            } else if (Array.isArray(selector) && selector !== window) {
                 selector.forEach(function (element) {
-                    self.bindEvent.call(self, event, element, handler);
+                    binder.bindEvent.call(binder, event, element, handler);
                 });
             } else {
                 selector.addEventListener(event, handler);
@@ -21,10 +28,8 @@
         }
 
         this.bind = function () {
-            var self = this;
-
             this.eventsArray.forEach(function (e) {
-                self.bindEvent.call(self, e.event, e.selector, e.handler);
+                binder.bindEvent.call(binder, e.event, e.selector, e.handler);
             });
         };
     };
@@ -48,6 +53,54 @@
             if (callNow) func.apply(context, args);
         };
     };
+
+    root.addClass = function addClass(element, className) {
+        if (empty(element)) return;
+
+        if (Array.isArray(element)) {
+            element.forEach(function (el) {
+                addClass(el, className);
+            })
+        } else {
+            element.addClass(className);
+        }
+    }
+
+    root.removeClass = function removeClass(element, className) {
+        if (empty(element)) return;
+
+        if (Array.isArray(element)) {
+            element.forEach(function (el) {
+                removeClass(el, className);
+            })
+        } else {
+            element.removeClass(className);
+        }
+    }
+
+    root.toggleClass = function toggleClass(element, className) {
+        if (empty(element)) return;
+
+        if (Array.isArray(element)) {
+            element.forEach(function (el) {
+                toggleClass(el, className);
+            })
+        } else {
+            element.toggleClass(className);
+        }
+    }
+
+    root.replaceClass = function replaceClass(element, oldClass, newClass) {
+        if (empty(element)) return;
+
+        if (Array.isArray(element)) {
+            element.forEach(function (el) {
+                replaceClass(el, oldClass, newClass);
+            })
+        } else {
+            element.replaceClass(oldClass, newClass);
+        }
+    }
 
 
     /* DOM Queries */

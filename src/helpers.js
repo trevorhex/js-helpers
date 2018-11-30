@@ -157,6 +157,14 @@
         return this;
     };
 
+    Array.prototype.clear = function clear() {
+        this.forEach(function (i) {
+            if (typeof i.innerHTML !== 'undefined')
+                i.innerHTML = '';
+        });
+        return this;
+    }
+
 
     /* Element Methods */
 
@@ -183,6 +191,11 @@
         this.classList.replace(oldClass, newClass);
         return this;
     };
+
+    Element.prototype.clear = function clear() {
+        this.innerHTML = '';
+        return this;
+    }
 
     Element.prototype.width = function width(value) {
         if (typeof value !== 'undefined') {

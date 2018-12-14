@@ -276,6 +276,30 @@
         return this;
     };
 
+    Element.prototype.getChildren = function getChildren() {
+        return Array.prototype.slice.call(this.children);
+    };
+
+    Element.prototype.next = function next(selector) {
+        var parent = this.parentNode,
+            children = parent.getChildren(),
+            search = true,
+            nextElement = null;
+
+        if (typeof selector === 'undefined') {
+            return this.nextElementSibling;
+        } else {
+            children.forEach(function (child) {
+                if (search && child.is(selector)) {
+                    search = false;
+                    nextElement = child;
+                }
+            });
+
+            return nextElement;
+        }
+    };
+
 })(this);
 
 (function (root) {
